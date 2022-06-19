@@ -53,6 +53,7 @@ app.get('/key/:key', bodyParser, async function(req,res){
     }
     if(_find == false){
         res.status(404);
+        res.send("{}");
         res.end();
     }
 });
