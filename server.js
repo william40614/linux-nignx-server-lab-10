@@ -9,6 +9,7 @@ const app = express();
 let JSONdata = {};
 
 app.post('/key', bodyParser, async function(req,res){
+    console.log("post");
     //console.log('encode ' + unescape(req.body.data));
     //console.log(req.body.data);
     //console.log(req.body.key);
@@ -39,7 +40,7 @@ app.post('/key', bodyParser, async function(req,res){
 });
 
 app.get('/key/:key', bodyParser, async function(req,res){
-    console.log("!#!#!");
+    console.log("get/key/key1");
     //console.log('encode ' + unescape(req.body.data));
     //console.log(req.body.data);
     //console.log(req.body.key);
@@ -47,7 +48,6 @@ app.get('/key/:key', bodyParser, async function(req,res){
     await editdata.getdata(addr).then(dat => {
         JSONdata = JSON.parse(dat);
     });
-    //console.log(req.params['key']);
     console.log(req.params['key']);
     _find = false;
     for( i=0; i<JSONdata.data_array.length;i++){
@@ -66,6 +66,7 @@ app.get('/key/:key', bodyParser, async function(req,res){
 });
 
 app.get('/key', bodyParser, async function(req,res){
+    console.log("get/key");
     //console.log('encode ' + unescape(req.body.data));
     //console.log(req.body.data);
     //console.log(req.body.key);
@@ -76,7 +77,6 @@ app.get('/key', bodyParser, async function(req,res){
     for( i=0; i<JSONdata.data_array.length;i++){
         tmp.push(JSONdata.data_array[i].key);
     }
-    console.log("@$!@#");
     res.status(200);
     res.send(tmp);
     res.end();
