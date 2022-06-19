@@ -16,6 +16,7 @@ app.post('/key', bodyParser, async function(req,res){
     await editdata.getdata(addr).then(dat => {
         JSONdata = JSON.parse(dat);
     });
+    console.log(req.body);
     re_flag = false;
     for( i=0; i < JSONdata.data_array.length; i++){
         if(JSONdata.data_array[i].key == req.body.key){
