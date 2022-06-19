@@ -10,9 +10,6 @@ let JSONdata = {};
 
 app.post('/key', bodyParser, async function(req,res){
     console.log("post");
-    //console.log('encode ' + unescape(req.body.data));
-    //console.log(req.body.data);
-    //console.log(req.body.key);
     await editdata.getdata(addr).then(dat => {
         JSONdata = JSON.parse(dat);
     });
@@ -31,9 +28,7 @@ app.post('/key', bodyParser, async function(req,res){
             "key" : req.body.key,
             "value" : req.body.value
         }
-        //JSONdata[JSONdata_l] = JSONdata[JSONdata_l] || [];           // <========
         JSONdata.data_array.push(data_tmp);
-        //JSONdata = JSON.stringify(temp);
         await editdata.writedata(addr,JSON.stringify(JSONdata));
         res.status(201);
         res.end();
@@ -42,10 +37,6 @@ app.post('/key', bodyParser, async function(req,res){
 
 app.get('/key/:key', bodyParser, async function(req,res){
     console.log("get/key/key1");
-    //console.log('encode ' + unescape(req.body.data));
-    //console.log(req.body.data);
-    //console.log(req.body.key);
-    //console.log(req.body);
     await editdata.getdata(addr).then(dat => {
         JSONdata = JSON.parse(dat);
     });
@@ -68,9 +59,6 @@ app.get('/key/:key', bodyParser, async function(req,res){
 
 app.get('/key', bodyParser, async function(req,res){
     console.log("get/key");
-    //console.log('encode ' + unescape(req.body.data));
-    //console.log(req.body.data);
-    //console.log(req.body.key);
     await editdata.getdata(addr).then(dat => {
         JSONdata = JSON.parse(dat);
     });
@@ -83,17 +71,18 @@ app.get('/key', bodyParser, async function(req,res){
     res.end();
 });
 
-/*app.put('/key/key', bodyParser, async function(req,res){
-    //console.log('encode ' + unescape(req.body.data));
-    //console.log(req.body.data);
-    //console.log(req.body.key);
+app.put('/key/:key', bodyParser, async function(req,res){
+    console.log("put");
     await editdata.getdata(addr).then(dat => {
         JSONdata = JSON.parse(dat);
     });
     _find = false;
+    console.log(req.params['key']);
     for( i=0; i<JSONdata.data_array.length;i++){
-        if(JSONdata,data_array[i].key == req.body.key){
-            JSONdata,data_array[i].value = req.body.value;
+        if(JSONdata.data_array[i].key == req.params['key']){
+            console.log(req.body.value);
+            JSONdata.data_array[i].value = req.body.value;
+            await editdata.writedata(addr,JSON.stringify(JSONdata));
             res.status(200);
             res.end();
             _find = true;
@@ -101,27 +90,32 @@ app.get('/key', bodyParser, async function(req,res){
         }
     }
     if(_find == false){
+        var data_tmp = {
+            "key" :req.params['key'],
+            "value" : req.body.value
+        }
+        JSONdata.data_array.push(data_tmp);
+        await editdata.writedata(addr,JSON.stringify(JSONdata));
         res.status(201);
         res.end();
     }
-});*/
+});
 
-/*app.delete('/key/key', bodyParser, async function(req,res){
-    //console.log('encode ' + unescape(req.body.data));
-    //console.log(req.body.data);
-    //console.log(req.body.key);
+app.delete('/key/:key', bodyParser, async function(req,res){
+    console.log("delete");
     await editdata.getdata(addr).then(dat => {
         JSONdata = JSON.parse(dat);
     });
     for( i=0; i<JSONdata.data_array.length;i++){
-        if(JSONdata,data_array[i].key == req.body.key1){
-            res.status(200);
-            res.send(JSONdata,data_array[i].value);
-            res.end();
+        if(JSONdata.data_array[i].key == req.params['key']){
+            var removed = JSONdata.data_array.splice(i,1);
             break;
         }
     }
-});*/
+    await editdata.writedata(addr,JSON.stringify(JSONdata));
+    res.status(200);
+    res.end();
+});
 
 app.listen(port, () => {
     console.log(`server app listening at http://localhost:${port}`)
