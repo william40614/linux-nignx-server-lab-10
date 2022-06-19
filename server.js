@@ -45,7 +45,9 @@ app.get('/key/:key', bodyParser, async function(req,res){
     for( i=0; i<JSONdata.data_array.length;i++){
         if(JSONdata.data_array[i].key == req.params['key']){
             res.status(200);
-            res.send(JSONdata.data_array[i].value);
+            var data_tmp = {};
+            data_tmp[req.params['key']] = JSONdata.data_array[i].value;
+            res.send(data_tmp);
             res.end();
             _find = true;
             break;
